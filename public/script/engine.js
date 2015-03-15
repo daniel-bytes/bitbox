@@ -1,5 +1,7 @@
 var context = new AudioContext();
 
+var bassDrum = new SampleChannel(context);
+var snareDrum = new SampleChannel(context);
 
 function loadAudio( object ) {
     var url = object.dataset.sample;
@@ -25,27 +27,27 @@ function play(object) {
 }
 
 
-var kick = document.getElementById('kick');
-var snare = document.getElementById('snare');
+var kickElement = document.getElementById('kick');
+var snareElement = document.getElementById('snare');
 
-kick.addEventListener("click", function() {
-    play(kick);
+kickElement.addEventListener("click", function() {
+    bassDrum.play();
 });
 
-snare.addEventListener("click", function() {
-    play(snare);
+snareElement.addEventListener("click", function() {
+    snareDrum.play();
 });
 
-loadAudio(kick);
-loadAudio(snare);
+bassDrum.loadAudio(kickElement.dataset.sample);
+snareDrum.loadAudio(snareElement.dataset.sample);
 
 window.addEventListener("keydown", function(e) {
     switch (e.keyCode) {
         case 81:
-            play(kick);
+            bassDrum.play();
             break;
         case 87:
-            play(snare);
+            snareDrum.play();
             break;
     }
 //    console.log(e.keyCode)
