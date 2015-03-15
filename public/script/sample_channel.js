@@ -1,6 +1,8 @@
-function SampleChannel(context)
+function SampleChannel(context, url)
 {
     this._context = context;
+
+	this.loadAudio(url);
 }
 
 SampleChannel.prototype.loadAudio = function(url, complete) 

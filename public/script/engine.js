@@ -1,13 +1,19 @@
 var context = new AudioContext();
 
-var bassDrumElement = new SampleChannelElement(
-                                document.getElementById('kick'), 
-                                context);
+var channels = [
+	new SampleChannel(context, "/samples/erase_classics.wav"),
+	new SampleChannel(context, "/samples/erase_chicagosnare.wav"),
+	new SampleChannel(context, "/samples/erase_classics.wav"),
+	new SampleChannel(context, "/samples/erase_chicagosnare.wav")
+];
 
-var snareDrumElement = new SampleChannelElement(
-                                document.getElementById('snare'), 
-                                context);
+var drumPadsElement = new DrumPadsElement(
+								document.getElementById('drumpads'),
+								function(i) {
+									channels[i].play();
+								});
 
+/*
 window.addEventListener("keydown", function(e) {
     switch (e.keyCode) {
         case 81:
@@ -19,6 +25,4 @@ window.addEventListener("keydown", function(e) {
     }
 //    console.log(e.keyCode)
 });
-
-var drumPadsElement = new DrumPadsElement([], document.getElementById('drumpads'));
-drumPadsElement.render();
+*/
