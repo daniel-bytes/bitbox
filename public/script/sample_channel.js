@@ -3,14 +3,15 @@ function SampleChannel(context)
     this._context = context;
 }
 
-SampleChannel.prototype.loadAudio = function(url, complete) {
+SampleChannel.prototype.loadAudio = function(url, complete) 
+{
     var $this = this;
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
     request.responseType = 'arraybuffer';
  
     request.onload = function() {
-        context.decodeAudioData(request.response, function(buffer) {
+        $this._context.decodeAudioData(request.response, function(buffer) {
             $this._buffer = buffer;
             
             if (complete) {
@@ -21,7 +22,8 @@ SampleChannel.prototype.loadAudio = function(url, complete) {
     request.send();
 }
 
-SampleChannel.prototype.play = function() {
+SampleChannel.prototype.play = function() 
+{
     var $this = this;
     var context = $this._context;
     var buffer = $this._buffer;

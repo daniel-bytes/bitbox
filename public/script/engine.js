@@ -1,54 +1,24 @@
 var context = new AudioContext();
 
-var bassDrum = new SampleChannel(context);
-var snareDrum = new SampleChannel(context);
+var bassDrumElement = new SampleChannelElement(
+                                document.getElementById('kick'), 
+                                context);
 
-function loadAudio( object ) {
-    var url = object.dataset.sample;
-    
-    var request = new XMLHttpRequest();
-    request.open('GET', url, true);
-    request.responseType = 'arraybuffer';
- 
-    request.onload = function() {
-        context.decodeAudioData(request.response, function(buffer) {
-            object.buffer = buffer;
-        });
-    }
-    request.send();
-}
-
-function play(object) {
-    var bufferSource = context.createBufferSource();
-    bufferSource.buffer = object.buffer;
-    bufferSource.connect(context.destination);
-    bufferSource.start(0);
-    object.bufferSource = bufferSource;
-}
-
-
-var kickElement = document.getElementById('kick');
-var snareElement = document.getElementById('snare');
-
-kickElement.addEventListener("click", function() {
-    bassDrum.play();
-});
-
-snareElement.addEventListener("click", function() {
-    snareDrum.play();
-});
-
-bassDrum.loadAudio(kickElement.dataset.sample);
-snareDrum.loadAudio(snareElement.dataset.sample);
+var snareDrumElement = new SampleChannelElement(
+                                document.getElementById('snare'), 
+                                context);
 
 window.addEventListener("keydown", function(e) {
     switch (e.keyCode) {
         case 81:
-            bassDrum.play();
+            bassDrumElement.getSampleChannel().play();
             break;
         case 87:
-            snareDrum.play();
+            snareDrumElement.getSampleChannel().play();
             break;
     }
 //    console.log(e.keyCode)
-})
+});
+
+var drumPadsElement = new DrumPadsElement([], document.getElementById('drumpads'));
+drumPadsElement.render();
