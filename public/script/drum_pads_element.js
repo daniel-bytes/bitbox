@@ -52,11 +52,11 @@ function DrumPadsElement(canvas, trigger)
 		$this.onMouseEvent("mouseup", e);
     });
 
-	window.addEventListener("keydown", function(e) {
+	window.addEventListener("pad", function(e) {
 	    $this.onKeyEvent("keydown", e);
 	});
 
-	window.addEventListener("keyup", function(e) {
+	window.addEventListener("pad", function(e) {
 	    $this.onKeyEvent("keyup", e);
 	});
 
@@ -107,18 +107,10 @@ DrumPadsElement.prototype.onMouseEvent = function(type, e)
 DrumPadsElement.prototype.onKeyEvent = function(type, e)
 {
 	var $this = this;
-	var i = -1;
-	
-	switch (e.keyCode) {
-        case 81: i = 0; break; // q
-        case 87: i = 1; break; // w
-		case 69: i = 2; break; // e
-		case 82: i = 3; break; // r
-		default: return;
-    }
+	var i = e.detail.i;
 
 	var item = $this._coordinates[i];
-	item.enabled = (type === "keydown");
+	item.enabled = (e.detail.type === "trigger");
 	
 	if (item.enabled) {
 		$this._trigger(i);

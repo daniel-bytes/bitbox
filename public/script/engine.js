@@ -1,4 +1,5 @@
 var context = new AudioContext();
+var keyboard = new KeyboardController();
 
 var channels = [
 	new SampleChannel(context, "/samples/erase_classics.wav"),
