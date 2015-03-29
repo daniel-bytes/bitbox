@@ -1,8 +1,17 @@
-function SampleChannel(context, url)
+function SampleChannel(context, url, trackNum)
 {
-    this._context = context;
+	var $this = this;
+	
+    $this._context = context;
+	$this._trackNum = trackNum;
 
-	this.loadAudio(url);
+	$this.loadAudio(url);
+	
+	window.addEventListener("trigger", function(e) {
+		if (e.detail.i === $this._trackNum) {
+	    	$this.play();
+		}
+	});
 }
 
 SampleChannel.prototype.loadAudio = function(url, complete) 
