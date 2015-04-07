@@ -33,7 +33,7 @@ SampleChannel.prototype.loadAudio = function(url, complete)
     request.send();
 }
 
-SampleChannel.prototype.play = function() 
+SampleChannel.prototype.play = function(offset) 
 {
     var $this = this;
     var context = $this._context;
@@ -42,6 +42,6 @@ SampleChannel.prototype.play = function()
     var bufferSource = context.createBufferSource();
     bufferSource.buffer = buffer;
     bufferSource.connect(context.destination);
-    bufferSource.start(0);
+    bufferSource.start(offset || 0);
     $this.bufferSource = bufferSource;
 }

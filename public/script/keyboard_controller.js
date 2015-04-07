@@ -1,5 +1,7 @@
-function KeyboardController()
+function KeyboardController(eventDispatch)
 {
+	this._eventDispatch = eventDispatch;
+	
 	var $this = this;
 	
 	// Define that the event name is 'build'.
@@ -27,10 +29,10 @@ KeyboardController.prototype.onKeyEvent = function(type, e)
 	
 	if (type === "keydown") {
 		var evt = new CustomEvent("pad", { detail: { type: "trigger", i: i } });
-		window.dispatchEvent(evt);
+		this._eventDispatch.dispatchEvent(evt);
 	}
 	else {
 		var evt = new CustomEvent("pad", { detail: { type: "release", i: i } });
-		window.dispatchEvent(evt);
+		this._eventDispatch.dispatchEvent(evt);
 	}
 }

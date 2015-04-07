@@ -1,6 +1,6 @@
-var context = new AudioContext();
-var keyboard = new KeyboardController();
 var eventDispatch = new EventDispatch(window);
+var context = new AudioContext();
+var keyboard = new KeyboardController(eventDispatch);
 
 var channels = [
 	new SampleChannel(context, "/samples/erase_classics.wav", 0),
@@ -32,5 +32,17 @@ eventDispatch.addEventListener("grid.drumpads.mousedown", function(e) {
 
 eventDispatch.addEventListener("grid.drumpads.mouseup", function(e) {
 	grid.set(e.detail.row, e.detail.col, false)
-	grid.render();
+	grid.flagRenderRequired();
 });
+
+var seq = new Sequencer({
+	context: context,
+	channels: 4,
+	steps: 16,
+	bpm: 120
+});
+
+eventDispatch.beginAnimationLoop(function() {
+	// all render functions should be called from here
+	grid.render();
+})

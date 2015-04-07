@@ -12,7 +12,7 @@ function CanvasGrid(params)
 	this._enabledColor = params.enabledColor;
 	this._cellBuffer = params.cellBuffer;
 	this._eventDispatch = params.eventDispatch;
-	
+	this._renderRequired = false;
 	
 	this._cellWidth = (this._canvas.width / this._cols);
 	this._cellHeight = (this._canvas.height / this._rows);
@@ -26,7 +26,7 @@ function CanvasGrid(params)
     });
 	
 	this.init();
-	this.render();
+	//this.render();
 }
 
 CanvasGrid.prototype.init = function()
@@ -48,10 +48,23 @@ CanvasGrid.prototype.init = function()
 		
 		this._cells.push(row);
 	}
+	
+	this.flagRenderRequired();
+}
+
+
+CanvasGrid.prototype.flagRenderRequired = function()
+{
+	this._renderRequired = true;
 }
 
 CanvasGrid.prototype.render = function()
 {
+	if (!this._renderRequired) {
+		return;
+	}
+	
+	console.log("rendering");
 	var radius = this._borderRadius;
 	var borderColor = this._borderColor;
     var context = this._canvas.getContext("2d");
@@ -65,6 +78,8 @@ CanvasGrid.prototype.render = function()
 			strokeRoundRect(context, item.x, item.y, item.w, item.h, radius, borderColor);
 		}
 	}
+	
+	this._renderRequired = false;
 }
 
 CanvasGrid.prototype.get = function(row, col)
@@ -75,6 +90,7 @@ CanvasGrid.prototype.get = function(row, col)
 CanvasGrid.prototype.set = function(row, col, enabled)
 {
 	this._cells[row][col].enabled = enabled;
+	this.flagRenderRequired();
 }
 
 CanvasGrid.prototype._onMouseEvent = function(type, e)
@@ -107,4 +123,6 @@ CanvasGrid.prototype._onMouseEvent = function(type, e)
 			}
 		}
 	}
+	
+	this.flagRenderRequired();
 }
