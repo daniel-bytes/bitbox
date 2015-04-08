@@ -28,11 +28,9 @@ KeyboardController.prototype.onKeyEvent = function(type, e)
     }
 	
 	if (type === "keydown") {
-		var evt = new CustomEvent("pad", { detail: { type: "trigger", i: i } });
-		this._eventDispatch.dispatchEvent(evt);
+		this._eventDispatch.dispatchEvent("pad", { type: "trigger", i: i });
 	}
 	else {
-		var evt = new CustomEvent("pad", { detail: { type: "release", i: i } });
-		this._eventDispatch.dispatchEvent(evt);
+		this._eventDispatch.dispatchEvent("pad", { type: "release", i: i });
 	}
 }

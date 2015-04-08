@@ -35,12 +35,25 @@ eventDispatch.addEventListener("grid.drumpads.mouseup", function(e) {
 	grid.flagRenderRequired();
 });
 
+
 var seq = new Sequencer({
+	name: "seq",
 	context: context,
+	eventDispatch: eventDispatch,
 	channels: 4,
 	steps: 16,
 	bpm: 120
 });
+
+// Test sequence
+seq.setSteps({
+	channels: [
+		[1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+		[0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	]
+})
 
 eventDispatch.beginAnimationLoop(function() {
 	// all render functions should be called from here

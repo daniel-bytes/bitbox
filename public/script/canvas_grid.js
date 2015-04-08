@@ -115,8 +115,7 @@ CanvasGrid.prototype._onMouseEvent = function(type, e)
 					eventDetail.col = c;
 					eventDetail.enabled = item.enabled;
 					
-					var evt = new CustomEvent(name, { detail: eventDetail });
-					this._eventDispatch.dispatchEvent(evt);
+					this._eventDispatch.dispatchEvent(name, eventDetail);
 					
 					break;
 				}

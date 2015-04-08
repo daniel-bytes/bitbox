@@ -18,8 +18,10 @@ EventDispatch.prototype.addEventListener = function(name, func)
 	this._window.addEventListener(name, func);
 }
 
-EventDispatch.prototype.dispatchEvent = function(evt)
+EventDispatch.prototype.dispatchEvent = function(name, detail)
 {
+	var evt = new CustomEvent(name, { detail: detail });
+	
 	this._window.dispatchEvent(evt);
 }
 
