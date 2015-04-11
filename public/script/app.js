@@ -2,10 +2,10 @@ var eventDispatch = new EventDispatch(window);
 var context = new AudioContext();
 
 var channels = [
-	new SampleChannel(context, "/samples/erase_classics.wav", 0),
-	new SampleChannel(context, "/samples/erase_chicagosnare.wav", 1),
-	new SampleChannel(context, "/samples/erase_classics.wav", 2),
-	new SampleChannel(context, "/samples/erase_chicagosnare.wav", 3)
+	new SampleChannel(context, "/samples/909+klick.wav", 0),
+	new SampleChannel(context, "/samples/snare_short2.wav", 1),
+	new SampleChannel(context, "/samples/plopp_filter1.wav", 2),
+	new SampleChannel(context, "/samples/noicybell.wav", 3)
 ];
 
 // Setup Sequencer
