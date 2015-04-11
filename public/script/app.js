@@ -19,10 +19,6 @@ var seq = new Sequencer({
 	noteResolution: 0
 });
 
-eventDispatch.addEventListener("sequencer.trigger", function(e) {
-    channels[e.detail.channel].play(e.detail.time);
-});
-
 
 // Setup UI 
 var seqgrid = new CanvasGrid({
@@ -34,8 +30,38 @@ var seqgrid = new CanvasGrid({
    borderRadius: 4,
    color: "green",
    enabledColor: "red",
-   cellBuffer: 3,
+   cellBuffer: 7,
    eventDispatch: eventDispatch
+});
+
+var step = new CanvasGrid({
+   name: "step.ui",
+   canvas: document.getElementById("step"),
+   rows: 1,
+   cols: 16,
+   borderColor: "black",
+   borderRadius: 4,
+   color: "yellow",
+   enabledColor: "red",
+   cellBuffer: 4,
+   eventDispatch: eventDispatch
+});
+
+step.set(0, 0, true)
+
+// Configure Events
+eventDispatch.addEventListener("sequencer.trigger", function(e) {
+    if (e.detail.velocity > 0) {
+        channels[e.detail.channel].play(e.detail.time);
+    }
+});
+
+
+eventDispatch.addEventListener("sequencer.step", function(e) {
+    for (var i = 0; i < step._cols; i++) {
+        step.set(0, i, e.detail.step === i);
+    }
+    
 });
 
 eventDispatch.addEventListener("sequencer.ui.mousedown", function(e) {
@@ -49,6 +75,7 @@ eventDispatch.addEventListener("sequencer.ui.mousedown", function(e) {
 eventDispatch.beginAnimationLoop(function() {
 	// all render functions should be called from here
 	seqgrid.render();
+	step.render();
 })
 
 document.getElementById("start").addEventListener("click", function(e){

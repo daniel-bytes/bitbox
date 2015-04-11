@@ -120,33 +120,37 @@ Sequencer.prototype.start = function()
     // These 3 functions are mostly copied from https://github.com/cwilso/metronome/blob/master/js/metronome.js
     var scheduleNote = function(beatNumber, time)
     {
-        // push the note on the queue, even if we're not playing.
-        //notesInQueue.push( { note: beatNumber, time: time } );
-
         if ( ($this._noteResolution === 1) && (beatNumber%2))
             return; // we're not playing non-8th 16th notes
         if ( ($this._noteResolution === 2) && (beatNumber%4))
             return; // we're not playing non-quarter 8th notes
 
-        // create an oscillator
+        // get triggers for the current step
         for (var channel = 0; channel < $this._channels; channel++) {
-            var v = $this.get(channel, beatNumber % $this._steps);
+            var step = beatNumber % $this._steps;
+            var velocity = $this.get(channel, step);
             
-            if (v) {
-                $this._eventDispatch.dispatchEvent(
-                            $this._name + ".trigger", 
-                            { 
-                                seq: $this, 
-                                time: time,  
-                                channel: channel,
-                                velocity: v 
-                            })                      
-            }
+            $this._eventDispatch.dispatchEvent(
+                        $this._name + ".trigger", 
+                        { 
+                            seq: $this, 
+                            time: time,  
+                            channel: channel,
+                            step: step,
+                            velocity: velocity 
+                        })
         }
     }
     
     var nextNote = function()
     {
+        $this._eventDispatch.dispatchEvent(
+                    $this._name + ".step", 
+                    { 
+                        seq: $this,
+                        step: $this._step
+                    })
+                    
         // Advance current note and time by a 16th note...
         var secondsPerBeat = 60.0 / $this._bpm;
         $this._nextNoteTime += 0.25 * secondsPerBeat;

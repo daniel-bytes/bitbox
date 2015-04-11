@@ -12,7 +12,8 @@ function CanvasGrid(params)
 	this._enabledColor = params.enabledColor;
 	this._cellBuffer = params.cellBuffer;
 	this._eventDispatch = params.eventDispatch;
-	this._renderRequired = false;
+	this._renderRequired = false;;
+	
 	
 	this._cellWidth = (this._canvas.width / this._cols);
 	this._cellHeight = (this._canvas.height / this._rows);
@@ -42,7 +43,8 @@ CanvasGrid.prototype.init = function()
 				y: (r * this._cellHeight) + this._cellBuffer, 
 				w: this._cellWidth - this._cellBuffer, 
 				h: this._cellHeight - this._cellBuffer,
-				enabled: false
+				enabled: false,
+				cellBuffer: null
 			});
 		}
 		
@@ -65,17 +67,22 @@ CanvasGrid.prototype.render = function()
 	}
 	
 	console.log("rendering");
-	var radius = this._borderRadius;
-	var borderColor = this._borderColor;
     var context = this._canvas.getContext("2d");
 
 	for (var r = 0; r < this._rows; r++) {
 		for (var c = 0; c < this._cols; c++) {
 			var item = this._cells[r][c];
 			var color = item.enabled === true ? this._enabledColor : this._color;
+			
+			var x = item.x;
+			var y = item.y;
+			var w = item.w;
+			var h = item.h;
+        	var radius = this._borderRadius;
+        	var borderColor = this._borderColor;
 
-			fillRoundRect(context, item.x, item.y, item.w, item.h, radius, color);
-			strokeRoundRect(context, item.x, item.y, item.w, item.h, radius, borderColor);
+			fillRoundRect(context, x, y, w, h, radius, color);
+			strokeRoundRect(context, x, y, w, h, radius, borderColor);
 		}
 	}
 	
@@ -101,7 +108,7 @@ CanvasGrid.prototype.setAll = function(data)
 		
 		for (var y = 0; y < row.length; y++) {
 			var enabled = row[y];
-			this.set(x, y, enabled);
+			this.set(x, y, enabled, null);
 		}
 	}
 }
