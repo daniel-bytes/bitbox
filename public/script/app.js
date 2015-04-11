@@ -24,15 +24,13 @@ var grid = new CanvasGrid({
 
 eventDispatch.addEventListener("grid.drumpads.mousedown", function(e) {
 	grid.set(e.detail.row, e.detail.col, true)
-	grid.render();
 	
 	var idx = (e.detail.row * 2) + e.detail.col;
 	channels[idx].play();
 });
 
 eventDispatch.addEventListener("grid.drumpads.mouseup", function(e) {
-	grid.set(e.detail.row, e.detail.col, false)
-	grid.flagRenderRequired();
+	grid.set(e.detail.row, e.detail.col, false);
 });
 
 
@@ -42,20 +40,35 @@ var seq = new Sequencer({
 	eventDispatch: eventDispatch,
 	channels: 4,
 	steps: 16,
-	bpm: 120
+	bpm: 120,
+	noteResolution: 0
 });
 
 // Test sequence
 seq.setSteps({
 	channels: [
-		[1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
-		[0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+		[1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 	]
 })
 
+eventDispatch.addEventListener("seq.trigger", function(e) {
+    channels[e.detail.channel].play(e.detail.time);
+});
+
 eventDispatch.beginAnimationLoop(function() {
 	// all render functions should be called from here
 	grid.render();
 })
+
+document.getElementById("start").addEventListener("click", function(e){
+    if (e.target.checked) {
+        seq.start();
+    }
+    else {
+        seq.stop();
+        seq.reset();
+    }
+});
