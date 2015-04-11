@@ -36,7 +36,7 @@ Sequencer.prototype.init = function()
 	$this._eventDispatch.dispatchEvent(this._name + ".init", { seq: this })
 }
 
-Sequencer.prototype.setStep = function(x, y, v)
+Sequencer.prototype.set = function(x, y, v)
 {
 	if (x < 0 || x >= this._channels) {
 		throw new Error("Invalid channel " + x);
@@ -51,7 +51,7 @@ Sequencer.prototype.setStep = function(x, y, v)
 	this._grid[x][y] = v;
 }
 
-Sequencer.prototype.setSteps = function(data)
+Sequencer.prototype.setAll = function(data)
 {
 	for (var x = 0; x < data.channels.length; x++) {
 		var channel = data.channels[x];
@@ -59,12 +59,12 @@ Sequencer.prototype.setSteps = function(data)
 		for (var y = 0; y < channel.length; y++) {
 			var v = channel[y];
 			
-			this.setStep(x, y, v);
+			this.set(x, y, v);
 		}
 	}
 }
 
-Sequencer.prototype.getStep = function(x, y)
+Sequencer.prototype.get = function(x, y)
 {
 	if (x < 0 || x >= this._channels) {
 		throw new Error("Invalid channel " + x);
@@ -74,6 +74,23 @@ Sequencer.prototype.getStep = function(x, y)
 	}
 	
 	return this._grid[x][y];
+}
+
+Sequencer.prototype.getAll = function()
+{
+    var data = { channels: [] };
+    
+    for (var x = 0; x < this._channels; x++) {
+        var channel = [];
+        
+        for (var y = 0; y < this._steps; y++) {
+            channel.push(this._grid[x][y])
+        }
+        
+        data.channels.push(channel);
+    }
+    
+    return data;
 }
 
 Sequencer.prototype.stop = function()
@@ -113,7 +130,7 @@ Sequencer.prototype.start = function()
 
         // create an oscillator
         for (var channel = 0; channel < $this._channels; channel++) {
-            var v = $this.getStep(channel, beatNumber % $this._steps);
+            var v = $this.get(channel, beatNumber % $this._steps);
             
             if (v) {
                 $this._eventDispatch.dispatchEvent(

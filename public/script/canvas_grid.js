@@ -89,15 +89,29 @@ CanvasGrid.prototype.get = function(row, col)
 
 CanvasGrid.prototype.set = function(row, col, enabled)
 {
-	this._cells[row][col].enabled = enabled;
+	this._cells[row][col].enabled = !!enabled;
 	this.flagRenderRequired();
 }
+
+CanvasGrid.prototype.setAll = function(data)
+{
+    // TODO : validate data
+	for (var x = 0; x < data.rows.length; x++) {
+		var row = data.rows[x];
+		
+		for (var y = 0; y < row.length; y++) {
+			var enabled = row[y];
+			this.set(x, y, enabled);
+		}
+	}
+}
+
 
 CanvasGrid.prototype._onMouseEvent = function(type, e)
 {
 	var x = e.offsetX;
 	var y = e.offsetY;
-	var name = "grid." + this._name + "." + type;
+	var name = this._name + "." + type;
 	
 	var eventDetail = {
 		row: 0,

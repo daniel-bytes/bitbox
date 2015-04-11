@@ -1,6 +1,5 @@
 var eventDispatch = new EventDispatch(window);
 var context = new AudioContext();
-var keyboard = new KeyboardController(eventDispatch);
 
 var channels = [
 	new SampleChannel(context, "/samples/erase_classics.wav", 0),
@@ -9,33 +8,9 @@ var channels = [
 	new SampleChannel(context, "/samples/erase_chicagosnare.wav", 3)
 ];
 
-var grid = new CanvasGrid({
-	name: "drumpads",
-	canvas: document.getElementById('drumpads'),
-	rows: 2,
-	cols: 2,
-	borderColor: "black",
-	borderRadius: 9,
-	color: "yellow",
-	enabledColor: "red",
-	cellBuffer: 3,
-	eventDispatch: eventDispatch
-});
-
-eventDispatch.addEventListener("grid.drumpads.mousedown", function(e) {
-	grid.set(e.detail.row, e.detail.col, true)
-	
-	var idx = (e.detail.row * 2) + e.detail.col;
-	channels[idx].play();
-});
-
-eventDispatch.addEventListener("grid.drumpads.mouseup", function(e) {
-	grid.set(e.detail.row, e.detail.col, false);
-});
-
-
+// Setup Sequencer
 var seq = new Sequencer({
-	name: "seq",
+	name: "sequencer",
 	context: context,
 	eventDispatch: eventDispatch,
 	channels: 4,
@@ -44,23 +19,36 @@ var seq = new Sequencer({
 	noteResolution: 0
 });
 
-// Test sequence
-seq.setSteps({
-	channels: [
-		[1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-	]
-})
-
-eventDispatch.addEventListener("seq.trigger", function(e) {
+eventDispatch.addEventListener("sequencer.trigger", function(e) {
     channels[e.detail.channel].play(e.detail.time);
+});
+
+
+// Setup UI 
+var seqgrid = new CanvasGrid({
+   name: "sequencer.ui",
+   canvas: document.getElementById("sequencer"),
+   rows: 4,
+   cols: 16,
+   borderColor: "black",
+   borderRadius: 4,
+   color: "green",
+   enabledColor: "red",
+   cellBuffer: 3,
+   eventDispatch: eventDispatch
+});
+
+eventDispatch.addEventListener("sequencer.ui.mousedown", function(e) {
+    var value = seq.get(e.detail.row, e.detail.col);
+    var newValue = (value === 0 ? 1 : 0);
+
+	seqgrid.set(e.detail.row, e.detail.col, newValue === 1);
+	seq.set(e.detail.row, e.detail.col, newValue);
 });
 
 eventDispatch.beginAnimationLoop(function() {
 	// all render functions should be called from here
-	grid.render();
+	seqgrid.render();
 })
 
 document.getElementById("start").addEventListener("click", function(e){
@@ -72,3 +60,19 @@ document.getElementById("start").addEventListener("click", function(e){
         seq.reset();
     }
 });
+
+// Demo code - Test sequence
+var demo_sequence = [
+    [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+seq.setAll({
+	channels: demo_sequence
+})
+
+seqgrid.setAll({
+    rows: demo_sequence
+})
