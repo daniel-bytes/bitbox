@@ -68,7 +68,6 @@ CanvasGrid.prototype.render = function()
 		return;
 	}
 	
-	console.log("rendering");
     var context = this._canvas.getContext("2d");
 
 	for (var r = 0; r < this._rows; r++) {
