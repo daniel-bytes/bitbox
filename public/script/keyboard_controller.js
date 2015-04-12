@@ -1,6 +1,6 @@
-function KeyboardController(eventDispatch)
+function KeyboardController(params)
 {
-	this._eventDispatch = eventDispatch;
+	this._eventDispatch = params.eventDispatch;
 	
 	var $this = this;
 	
@@ -16,7 +16,6 @@ function KeyboardController(eventDispatch)
 
 KeyboardController.prototype.onKeyEvent = function(type, e)
 {
-	var $this = this;
 	var i = -1;
 	
 	switch (e.keyCode) {
@@ -24,13 +23,19 @@ KeyboardController.prototype.onKeyEvent = function(type, e)
         case 87: i = 1; break; // w
 		case 69: i = 2; break; // e
 		case 82: i = 3; break; // r
+		case 32: {
+			if (type === "keydown") {
+				this._eventDispatch.dispatchEvent("key.play", {});
+			}
+			return;
+		}
 		default: return;
     }
 	
 	if (type === "keydown") {
-		this._eventDispatch.dispatchEvent("pad.trigger", { i: i });
+		this._eventDispatch.dispatchEvent("key.trigger", { i: i });
 	}
 	else {
-		this._eventDispatch.dispatchEvent("pad.release", { i: i });
+		this._eventDispatch.dispatchEvent("key.release", { i: i });
 	}
 }

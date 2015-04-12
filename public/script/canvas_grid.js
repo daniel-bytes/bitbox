@@ -28,6 +28,8 @@ function CanvasGrid(params)
 	
 	this.init();
 	//this.render();
+	
+	this._eventDispatch.addAnimationEvent(this._name, function() { $this.render() });
 }
 
 CanvasGrid.prototype.init = function()
@@ -113,6 +115,16 @@ CanvasGrid.prototype.setAll = function(data)
 	}
 }
 
+CanvasGrid.prototype.reset = function()
+{
+	for (var x = 0; x < this._cells.length; x++) {
+		var row = this._cells[x];
+		
+		for (var y = 0; y < row.length; y++) {
+			this.set(x, y, false);
+		}
+	}
+}
 
 CanvasGrid.prototype._onMouseEvent = function(type, e)
 {

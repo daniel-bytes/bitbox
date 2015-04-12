@@ -21,6 +21,12 @@ var seq = new Sequencer({
 
 
 // Setup UI 
+var transport = new TransportControls({
+	name: "transport",
+	canvas: document.getElementById("transport"),
+	eventDispatch: eventDispatch
+})
+
 var seqgrid = new CanvasGrid({
    name: "sequencer.ui",
    canvas: document.getElementById("sequencer"),
@@ -49,7 +55,40 @@ var step = new CanvasGrid({
 
 step.set(0, 0, true)
 
+function onTransportState(state)
+{
+	switch(state) {
+		case TransportStates.Play:
+			seq.start();
+			break;
+		case TransportStates.Pause:
+			seq.stop();
+			break;
+		case TransportStates.Stop:
+			seq.stop();
+			seq.reset();
+			step.reset();
+			step.set(0, 0, true)
+			break;
+	}
+}
+
+// keyboard
+var keyboard = new KeyboardController({
+	eventDispatch: eventDispatch
+})
+
 // Configure Events
+eventDispatch,addEventListener("transport.change", function(e) {
+	onTransportState(e.detail.state);
+})
+
+eventDispatch.addEventListener("key.play", function(e) {
+	var state = transport.getState() === TransportStates.Play ? TransportStates.Pause : TransportStates.Play;
+	transport.setState(state);
+	onTransportState(state);
+});
+
 eventDispatch.addEventListener("sequencer.trigger", function(e) {
     if (e.detail.velocity > 0) {
         channels[e.detail.channel].play(e.detail.time);
@@ -72,28 +111,16 @@ eventDispatch.addEventListener("sequencer.ui.mousedown", function(e) {
 	seq.set(e.detail.row, e.detail.col, newValue);
 });
 
-eventDispatch.beginAnimationLoop(function() {
-	// all render functions should be called from here
-	seqgrid.render();
-	step.render();
-})
+// Start animation loop
+eventDispatch.beginAnimationLoop();
 
-document.getElementById("start").addEventListener("click", function(e){
-    if (e.target.checked) {
-        seq.start();
-    }
-    else {
-        seq.stop();
-        seq.reset();
-    }
-});
 
 // Demo code - Test sequence
 var demo_sequence = [
     [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0]
 ];
 
 seq.setAll({

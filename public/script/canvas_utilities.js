@@ -1,12 +1,6 @@
 // see http://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
 function fillRoundRect(ctx, x, y, width, height, radius, fillStyle) 
 {
-	if (typeof stroke == "undefined" ) {
-	  stroke = true;
-	}
-	if (typeof radius === "undefined") {
-	  radius = 5;
-	}
 	ctx.beginPath();
 	ctx.moveTo(x + radius, y);
 	ctx.lineTo(x + width - radius, y);
@@ -23,14 +17,19 @@ function fillRoundRect(ctx, x, y, width, height, radius, fillStyle)
    	ctx.fill();        
 }
 
+function fillTriangle(ctx, x1, y1, x2, y2, x3, y3, fillStyle)
+{
+	ctx.beginPath();
+	ctx.moveTo(x1, y1);
+	ctx.lineTo(x2, y2);
+	ctx.lineTo(x3, y3);
+	
+	ctx.fillStyle = fillStyle;
+	ctx.fill();
+}
+
 function strokeRoundRect(ctx, x, y, width, height, radius, strokeStyle) 
 {
-	if (typeof stroke == "undefined" ) {
-	  stroke = true;
-	}
-	if (typeof radius === "undefined") {
-	  radius = 5;
-	}
 	ctx.beginPath();
 	ctx.moveTo(x + radius, y);
 	ctx.lineTo(x + width - radius, y);
