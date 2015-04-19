@@ -19,11 +19,12 @@ var seq = new Sequencer({
 	noteResolution: 0
 });
 
-
+/*
 var padsynth = new PadSynth({
 	name: "padsynth",
 	context: context
 })
+*/
 
 // Setup UI 
 var transport = new TransportControls({
@@ -65,16 +66,16 @@ function onTransportState(state)
 	switch(state) {
 		case TransportStates.Play:
 			seq.start();
-			padsynth.start();
+			//padsynth.start();
 			break;
 		case TransportStates.Pause:
 			seq.stop();
-			padsynth.stop();
+			//padsynth.stop();
 			break;
 		case TransportStates.Stop:
 			seq.stop();
 			seq.reset();
-			padsynth.stop();
+			//padsynth.stop();
 			step.reset();
 			step.set(0, 0, true)
 			break;

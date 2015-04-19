@@ -25,9 +25,9 @@ PadSynth.prototype.start = function()
 		channel.gain.connect(this._context.destination);
 		
 		channel.freq_lfo = this._context.createOscillator();
-		channel.freq_lfo.frequency.value = 1 + (i * 2);
+		channel.freq_lfo.frequency.value = 5; //1 + (i * 2);
 		channel.freq_lfo_gain = this._context.createGain();
-		channel.freq_lfo_gain.gain.value = 100;
+		channel.freq_lfo_gain.gain.value = 1;
 		channel.freq_lfo.connect(channel.freq_lfo_gain);
 		channel.freq_lfo_gain.connect(channel.osc.frequency)
 		
