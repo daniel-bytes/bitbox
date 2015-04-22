@@ -1,5 +1,9 @@
 var eventDispatch = new EventDispatch(window);
-var context = new AudioContext();
+var context = GetAudioContext();
+
+if (!context) {
+	alert("WebAudio API is not implimented for this browser");
+}
 
 var channels = [
 	new SampleChannel(context, "/samples/909+klick.wav", 0),
