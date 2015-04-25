@@ -1,8 +1,11 @@
+(function() {
+
 var eventDispatch = new EventDispatch(window);
 var context = GetAudioContext();
 
 if (!context) {
-	alert("WebAudio API is not implimented for this browser");
+	alert("WebAudio API is not implimented for this browser.  Please make sure your browser is up to date.");
+	return;
 }
 
 var channels = [
@@ -143,3 +146,5 @@ seq.setAll({
 seqgrid.setAll({
     rows: demo_sequence
 })
+
+})();
