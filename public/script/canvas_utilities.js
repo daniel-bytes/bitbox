@@ -45,3 +45,12 @@ function strokeRoundRect(ctx, x, y, width, height, radius, strokeStyle)
 	ctx.strokeStyle = strokeStyle;
  	ctx.stroke();   
 }
+
+function getClickPosition(e)
+{
+	var bounds = e.target.getBoundingClientRect();
+	var x = e.offsetX ? e.offsetX : (e.pageX - bounds.left);
+	var y = e.offsetY ? e.offsetY : (e.pageY - bounds.top);
+	
+	return { x: x, y: y };
+}

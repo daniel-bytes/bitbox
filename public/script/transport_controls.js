@@ -122,8 +122,9 @@ TransportControls.prototype.render = function()
 
 TransportControls.prototype._onMouseEvent = function(type, e)
 {
-	var x = e.offsetX;
-	var y = e.offsetY;
+	var pos = getClickPosition(e);
+	var x = pos.x;
+	var y = pos.y;
 	
 	if (this._inCoordinates(x, y, this._playCoordinates)) {
 		this._buttonClicked = TransportStates.Play;

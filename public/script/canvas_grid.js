@@ -127,8 +127,10 @@ CanvasGrid.prototype.reset = function()
 
 CanvasGrid.prototype._onMouseEvent = function(type, e)
 {
-	var x = e.offsetX;
-	var y = e.offsetY;
+	var pos = getClickPosition(e);
+	var x = pos.x;
+	var y = pos.y;
+	
 	var name = this._name + "." + type;
 	
 	var eventDetail = {
